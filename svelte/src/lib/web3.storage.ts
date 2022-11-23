@@ -3,7 +3,7 @@ import type {CIDString} from 'web3.storage/dist/src/lib/interface';
 import {File} from 'web3.storage';
 import { Buffer } from 'buffer';
 
-const web3StorageToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweEY2MDg4YkYzMEY5ZkJmMkIxMWQ5MDhmQTI0ZDEwMjNhZGI2NTkwNTkiLCJpc3MiOiJ3ZWIzLXN0b3JhZ2UiLCJpYXQiOjE2NTE2NzA3MjU0NjcsIm5hbWUiOiJjb2RpbmctZG9qbyJ9.gBjcKpOMRSRh3aFHT3O4VwJW9lq2XB3QoiHH2aBvgJg";
+const web3StorageToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweDZBNzQyNjUyQjE5YkYxOTE3QTMyRjU3MTQ5OTZERkZiZTYyQTU5NjYiLCJpc3MiOiJ3ZWIzLXN0b3JhZ2UiLCJpYXQiOjE2Njg4ODQwNDUyODMsIm5hbWUiOiI3MGh3b2NoZSJ9.0X9aY1RsQ_38VYCxgs1rhyKxU6-HmDk3TeC7PTeH_xg";
 
 function makeStorageClient() {
     return new Web3Storage({token: web3StorageToken});

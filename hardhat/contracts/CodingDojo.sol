@@ -3,16 +3,28 @@ pragma solidity ^0.8.4;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
+import "@openzeppelin/contracts/utils/Counters.sol";
 
 contract CodingDojo is Ownable {
-
+    // using Address for address;
     using Strings for uint256;
+    using Counters for Counters.Counter;
 
     // Token name
     string private _name;
 
     // Token symbol
     string private _symbol;
+
+    // Mapping from token ID to owner address
+    mapping(uint256 => address) private _owners;
+
+    // Mapping owner address to token count
+    mapping(address => uint256) private _balances;
+
+    mapping(uint256 => string) private _tokens;
+
+    Counters.Counter private tokenIdCounter;
 
     /**
      * @dev Initializes the contract by setting a `name` and a `symbol` to the token collection.
@@ -26,14 +38,14 @@ contract CodingDojo is Ownable {
      * @dev See {IERC721Metadata-name}.
      */
     function name() public view returns (string memory) {
-        return "";
+        return _name;
     }
 
     /**
      * @dev See {IERC721Metadata-symbol}.
      */
     function symbol() public view returns (string memory) {
-        return "";
+        return _symbol;
     }
 
     /**
@@ -56,7 +68,15 @@ contract CodingDojo is Ownable {
     */
     function safeMint(address to, string memory uri) public onlyOwner {
 
+        uint currentTokenId = tokenIdCounter.current();
+        _mint(to, currentTokenId);
+        _setTokenURI(currentTokenId, uri);
+        tokenIdCounter.increment();
+
+
+
     }
+
 
     /**
      * @dev Mints `tokenId` and transfers it to `to`.
@@ -71,6 +91,12 @@ contract CodingDojo is Ownable {
      * Emits a {Transfer} event.
     */
     function _mint(address to, uint256 tokenId) internal virtual {
+
+        require(!_exists(tokenId), 'token id does already exist');
+        require(to!=address(0), "address is zero address");
+        _balances[to] += 1;
+        _owners[tokenId] = to;
+
     }
 
     /**
@@ -81,13 +107,16 @@ contract CodingDojo is Ownable {
      * - `tokenId` must exist.
      */
     function _setTokenURI(uint256 tokenId, string memory _tokenURI) internal virtual {
+        _tokens[tokenId] = tokenURI(tokenId);
     }
 
     /**
      * Returns the Uniform Resource Identifier (URI) for tokenId token.
      */
     function tokenURI(uint256 tokenId) public view returns (string memory) {
-        return "";
+        string memory baseURI = _baseURI();
+
+        return string(abi.encodePacked(baseURI, tokenId));
     }
 
     /**
@@ -99,14 +128,14 @@ contract CodingDojo is Ownable {
      * and stop existing when they are burned (`_burn`).
      */
     function _exists(uint256 tokenId) internal view returns (bool) {
-        return true;
+        return _owners[tokenId] != address(0);
     }
 
     /**
      * @dev See {IERC721Enumerable-totalSupply}.
      */
     function totalSupply() public view returns (uint256) {
-        return 0;
+        return tokenIdCounter.current();
     }
 
     /**
@@ -114,14 +143,17 @@ contract CodingDojo is Ownable {
      * Requirements: tokenId must exist.
     */
     function ownerOf(uint256 tokenId) external view returns (address) {
-        return address(0);
+        address owner = _owners[tokenId];
+        require(owner != address(0));
+        return owner;
     }
 
     /**
      * Returns the owner of the tokenId token.
     */
     function balanceOf(address owner) external view returns (uint256) {
-        return 0;
+        require(owner != address(0));
+        return _balances[owner];
     }
 
 }
